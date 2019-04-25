@@ -33,7 +33,7 @@ class GitCommitter:
 		'''
 		commit git.
 		'''
-		print(self.__xml.git_command())
+		#print(self.__xml.git_command())
 		os.chdir(self.__xml.git_path())
 
 		res = commands.getoutput(self.__xml.git_command() + ' add -A')
