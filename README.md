@@ -3,6 +3,9 @@ gdrive_git
 
 Overview
 
+## Version
+0.0.1
+
 ## Description
 Provide versioning to google drive folder with git.
 
