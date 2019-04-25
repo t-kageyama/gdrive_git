@@ -22,11 +22,11 @@ your command line git tool is properly installed.
 * copy contents of misc/ directory of this project to your gdrive_git/ working directory.
 * log in to your google developer console and enable google drive API.
 * generate app and obtain client-id and client-secret.
-* past client-id into __YOUR_APP_CLIENT_ID__ and client-secret into __YOUR_APP_CLIENT_SECRET__ in settings.yaml in your gdrive_git/ working directory.
-* replace __YOUR_GOOGLE_DRIVE_FOLDER_ID_TO_GIT__ with your google folder id, which you want to provide versioning. you better not to set the root of your google drive. you can obtain it with log in to your gooogle drive with your account, and browse your target directory. the URL is something like 'https://drive.google.com/drive/folders/<<YOUR-GOOGLE-DRIVE-FOLDER-ID>>'.
-* replace __YOUR_LOCAL_GIT_REPOSITORY_PATH__ with your local git repository path in gdrive_git.xml in your gdrive_git/ working directory.
+* past client-id into \_\_YOUR_APP_CLIENT_ID\_\_ and client-secret into \_\_YOUR_APP_CLIENT_SECRET\_\_ in settings.yaml in your gdrive_git/ working directory.
+* replace \_\_YOUR_GOOGLE_DRIVE_FOLDER_ID_TO_GIT\_\_ with your google folder id, which you want to provide versioning. you better not to set the root of your google drive. you can obtain it with log in to your gooogle drive with your account, and browse your target directory. the URL is something like 'https://drive.google.com/drive/folders/YOUR-GOOGLE-DRIVE-FOLDER-ID'.
+* replace \_\_YOUR_LOCAL_GIT_REPOSITORY_PATH\_\_ with your local git repository path in gdrive_git.xml in your gdrive_git/ working directory.
 * you are better to set full path of your git command line tool into gdrive_git -> git -> command element's text of gdrive_git.xml in your gdrive_git/ working directory. you can obtain it with $ which git.
-* replace __YOUR_GDRIVE_GIT_PYTHON_DIR_PATH__ with your gdrive_git python source diretory path in gdrive_git.sh in your gdrive_git/ working directory.
+* replace \_\_YOUR_GDRIVE_GIT_PYTHON_DIR_PATH\_\_ with your gdrive_git python source diretory path in gdrive_git.sh in your gdrive_git/ working directory.
 * go to your gdrive_git/ working directory.
 * then $ ./gdrive_git.sh
 * gdrive_git will prompt you google api URL and access it with your favorite browser. you can obtain verification code, then copy and past into your gdrive_git tool input and push enter key.
