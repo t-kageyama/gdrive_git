@@ -52,7 +52,7 @@ Provide versioning to google drive folder with git.
       # google document to microsoft word.
       -
         from: application/vnd.google-apps.document
-        to: pplication/vnd.openxmlformats-officedocument.wordprocessingml.document
+        to: application/vnd.openxmlformats-officedocument.wordprocessingml.document
         extension: docx
         ...
 ```
