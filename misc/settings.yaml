@@ -12,4 +12,48 @@ get_refresh_token: True
 oauth_scope:
   - https://www.googleapis.com/auth/drive.readonly
 
-xml_file: gdrive_git.xml
+#xml_file: gdrive_git.xml
+gdrive_git:
+  # google document on google drive configurations.
+  gdrive:
+    folder:
+      id: __YOUR_GOOGLE_DRIVE_FOLDER_ID_TO_GIT__
+    gdoc:
+      # google documents convert configurations.
+      # google document to open office doc.
+      -
+        from: application/vnd.google-apps.document
+        to: application/vnd.oasis.opendocument.text
+        extension: odt
+      # google spread sheet to open office spread sheet.
+      -
+        from: application/vnd.google-apps.spreadsheet
+        to: application/vnd.oasis.opendocument.spreadsheet
+        extension: ods
+      # google slide to open office presentation.
+      -
+        from: application/vnd.google-apps.presentation
+        to: application/vnd.oasis.opendocument.presentation
+        extension: odp
+      # google draw to SVG.
+      -
+        from: application/vnd.google-apps.drawing
+        to: image/svg+xml
+        extension: svg
+      # google script to javascript json.
+      -
+        from: application/vnd.google-apps.script
+        to: application/vnd.google-apps.script+json
+        extension: json
+      # google map to google earth KML.
+      -
+        from: application/vnd.google-apps.map
+        to: application/vnd.google-earth.kml+xml
+        extension: kml
+  # git configurations.
+  git:
+    repository: __YOUR_LOCAL_GIT_REPOSITORY_PATH__
+    # efault is 'git', but you should better to set fullpath to your git command.
+    #command: /usr/bin/git
+    # format template for datetime.datetime.strftime() default is 'Committed at %F %T.'.
+    #comment: Committed at %c.
