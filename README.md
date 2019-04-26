@@ -10,12 +10,12 @@ Overview
 Provide versioning to google drive folder with git.
 
 ## Requirement
-Mac OSX, Linux
-Python 2.7
-google-api-python-client
-PyDrive
-do pip install or any other equivalent.
-your command line git tool is properly installed.
+* Mac OSX, Linux
+* Python 2.7
+* google-api-python-client
+* PyDrive
+* do pip install or any other equivalent.
+* your command line git tool is properly installed.
 
 ## Usage
 * prepare your google drive git repository with $ git init --bare --shared ... to your git central repository.
