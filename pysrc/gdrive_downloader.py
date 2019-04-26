@@ -130,18 +130,19 @@ class GDriveDownloader:
 
 		self.__file_to_dictionary(item, gdrive_path)
 
+		print_out_file = outfile[len(self.__xml.git_path()):]	# print out file path remove git repository path.
 		# compare file date and google drive modify date.
 		if os.path.exists(outfile):
 			file_date = dt.fromtimestamp(os.stat(outfile).st_mtime)
 			#print("file_date = {}, modify_date = {}".format(file_date, modify_date))
 			if file_date >= modify_date:
-				print('{} not modified!'.format(outfile))
+				print('{} not modified!'.format(print_out_file))
 				return
 			modify = 1
 		else:
 			add = 1
 
-		print('{} start downloading!'.format(outfile))
+		print('{} start downloading!'.format(print_out_file))
 
 		fh = open(outfile, 'w')
 		downloader = MediaIoBaseDownload(fh, request)
@@ -150,7 +151,7 @@ class GDriveDownloader:
 			status, done = downloader.next_chunk()
 
 		fh.close()
-		print("{} finish download!".format(outfile))
+		print("{} finish download!".format(print_out_file))
 
 		#access_date = dt.strptime(item["lastViewedByMeDate"], self.GOOGLE_DATE_FORMAT).replace(microsecond=0) + timedelta(hours=self.__hour_delta)
 		access_date = self.__conv_datetime(item['lastViewedByMeDate'])
