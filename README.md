@@ -58,7 +58,7 @@ Provide versioning to google drive folder with git.
 
 ## Licence
 
-[MIT](https://github.com/t-kageyama/gdrive_git/blob/master/README.md)
+[MIT](https://github.com/t-kageyama/gdrive_git/blob/master/LICENSE)
 
 ## Author
 
