@@ -16,6 +16,16 @@ class GDriveGitXML:
 	EXTENSION = 'extension'
 	DEFAULT_COMMENT = 'Committed at %F %T.'
 	DEFAULT_COMMAND = 'git'
+	XML_FILE_ELEMENT = 'xml_file'
+	DRIVE_GIT_ELEMENT = 'gdrive_git'
+	GDRIVE_ELEMENT = 'gdrive'
+	FOLDER_ELEMENT = 'folder'
+	ID_ELEMENT = 'id'
+	GDOC_ELEMENT = 'gdoc'
+	GIT_ELEMENT = DEFAULT_COMMAND
+	REPOSITORY_ELEMENT = 'repository'
+	COMMAND_ELEMENT = 'command'
+	COMMENT_ELEMENT = 'comment'
 
 	# variables.
 	__xml_path = None	# XML file path.
@@ -38,19 +48,82 @@ class GDriveGitXML:
 		self.__git_format = self.DEFAULT_COMMENT
 
 		# read XML file.
-		self.__xml_path = yaml['xml_file']
+		if not self.XML_FILE_ELEMENT in yaml:
+			self.__load_from_yaml(yaml)
+		else:
+			self.__xml_path = yaml[self.XML_FILE_ELEMENT]
+			self.__load_from_xml()
+
+
+	def __load_from_yaml(self, yaml):
+		'''
+		load from YAML file.
+		yaml dict:
+			content of settings.yaml file.
+		'''
+		gdrive_git = yaml[self.DRIVE_GIT_ELEMENT]
+		gdrive = gdrive_git[self.GDRIVE_ELEMENT]
+		folder = gdrive[self.FOLDER_ELEMENT]
+		self.__folder_id = folder[self.ID_ELEMENT]
+		if self.__folder_id is None or len(self.__folder_id) < 1:
+			raise ValueError('target folder id not found in settings.yaml file!')
+
+		# converts list.
+		convert_list = gdoc = gdrive[self.GDOC_ELEMENT]
+		index = 1
+		for convert in convert_list:
+			conv_dict = {}
+			from_val = convert[self.FROM]
+			if from_val == None or len(from_val) < 1:
+				raise ValueError('from value not found in settings.yaml file at No.{} convert!'.format(index))
+			to_val = convert[self.TO]
+			if to_val == None or len(to_val) < 1:
+				raise ValueError('to value not found in settings.yaml file at No.{} convert!'.format(index))
+			extension = convert[self.EXTENSION]
+			if extension == None or len(extension) < 1:
+				raise ValueError('extension value not found in settings.yaml file at No.{} convert!'.format(index))
+			conv_dict[self.FROM] = from_val
+			conv_dict[self.TO] = to_val
+			conv_dict[self.EXTENSION] = extension
+			if from_val not in self.__converts:
+				self.__converts[from_val] = conv_dict
+			else:
+				raise ValueError('duplicate entry for {} in settings.yaml file at No.{} convert!'.format(from_val, index))
+			index = index + 1
+
+		# getting git local repository path.
+		git = gdrive_git[self.GIT_ELEMENT]
+		repository = git[self.REPOSITORY_ELEMENT]
+		self.__git_path = os.path.abspath(repository)
+		if self.__git_path is None or len(self.__git_path) < 1:
+			raise ValueError('local git repository path not found in settings.yaml file!')
+		if not os.path.isdir(self.__git_path):	# check directory exists.
+			raise ValueError('local git repository path {} in settings.yaml file not exist!'.format(self.__git_path))
+
+		command_line = git[self.COMMAND_ELEMENT]
+		if not command_line is None and len(command_line) > 0:
+			self.__git_command = command_line
+		comment_format = git[self.COMMENT_ELEMENT]
+		if not comment_format is None and len(comment_format) > 0:
+			self.__git_format = comment_format
+
+
+	def __load_from_xml(self):
+		'''
+		load from XML file.
+		'''
 		gdrive_git = ET.parse(self.__xml_path)
-		gdrive = gdrive_git.find('gdrive')
+		gdrive = gdrive_git.find(self.GDRIVE_ELEMENT)
 
 		# getting target folder id.
-		folder = gdrive.find('folder')
-		folder_id = folder.find('id')
+		folder = gdrive.find(self.FOLDER_ELEMENT)
+		folder_id = folder.find(self.ID_ELEMENT)
 		self.__folder_id = folder_id.text
 		if self.__folder_id is None or len(self.__folder_id) < 1:
 			raise ValueError('target folder id not found in XML file {}!'.format(self.__xml_path))
 
 		# converts list.
-		gdoc = gdrive.find('gdoc')
+		gdoc = gdrive.find(self.GDOC_ELEMENT)
 		convert_list = gdoc.findall('converts/convert')
 		index = 1
 		for convert in convert_list:
@@ -74,20 +147,20 @@ class GDriveGitXML:
 			index = index + 1
 
 		# getting git local repository path.
-		git = gdrive_git.find('git')
-		repository = git.find('repository')
+		git = gdrive_git.find(self.GIT_ELEMENT)
+		repository = git.find(self.REPOSITORY_ELEMENT)
 		self.__git_path = os.path.abspath(repository.text)
 		if self.__git_path is None or len(self.__git_path) < 1:
 			raise ValueError('local git repository path not found in XML file {}!'.format(self.__xml_path))
 		if not os.path.isdir(self.__git_path):	# check directory exists.
 			raise ValueError('local git repository path {} in XML file {} not exist!'.format(self.__git_path, self.__xml_path))
 
-		command = git.find('command')
+		command = git.find(self.COMMAND_ELEMENT)
 		if not command is None:
 			command_line = command.text
 			if not command_line is None and len(command_line) > 0:
 				self.__git_command = command_line
-		comment = git.find('comment')
+		comment = git.find(self.COMMENT_ELEMENT)
 		if not comment is None:
 			comment_format = comment.text
 			if not comment_format is None and len(comment_format) > 0:
